@@ -3,9 +3,11 @@
 import React, { useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, TrendingUp, Cpu, RefreshCw, BarChart2 } from 'lucide-react';
+import { ArrowLeft, TrendingUp, Cpu, RefreshCw, BarChart2, ShoppingCart } from 'lucide-react';
 import { StockChart } from '@/components/dashboard/StockChart';
 import { TimeframeSelector } from '@/components/dashboard/TimeframeSelector';
+import { RiskRadarChart } from '@/components/dashboard/RiskRadarChart';
+import { OrderModal } from '@/components/dashboard/OrderModal';
 import { useChartData, TimeframeOption } from '@/hooks/useChartData';
 import { PriceTag } from '@/components/ui/PriceTag';
 import { Badge } from '@/components/ui/Badge';
@@ -17,6 +19,7 @@ export default function StockDetailPage() {
   const symbol = rawSymbol.toUpperCase();
 
   const [timeframe, setTimeframe] = useState<TimeframeOption>('1M');
+  const [isOrderModalOpen, setIsOrderModalOpen] = useState<boolean>(false);
   const { data, isLoading, error, refetch } = useChartData(symbol, timeframe);
 
   // Compute latest quote parameters from chart data
@@ -56,9 +59,20 @@ export default function StockDetailPage() {
           <p className="text-sm text-slate-400">Market Price Analytics & Technical Candlestick Series</p>
         </div>
 
-        <div className="text-right space-y-1">
-          <PriceTag value={currentPrice} changePct={dayChangePct} currency={symbol.includes('NS') ? 'INR' : 'USD'} size="lg" />
-          <span className="text-xs text-slate-500 block">Real-time quote feed</span>
+        <div className="flex flex-col sm:flex-row items-end sm:items-center gap-4">
+          <div className="text-right space-y-1">
+            <PriceTag value={currentPrice} changePct={dayChangePct} currency={symbol.includes('NS') ? 'INR' : 'USD'} size="lg" />
+            <span className="text-xs text-slate-500 block">Real-time quote feed</span>
+          </div>
+
+          <Button
+            variant="primary"
+            leftIcon={<ShoppingCart className="w-4 h-4" />}
+            onClick={() => setIsOrderModalOpen(true)}
+            className="shadow-lg shadow-profit/20"
+          >
+            Trade Asset (Paper Money)
+          </Button>
         </div>
       </div>
 
@@ -80,6 +94,11 @@ export default function StockDetailPage() {
         {/* Lightweight Charts Candlestick Container */}
         <StockChart data={data} isLoading={isLoading} error={error} height={460} />
       </div>
+
+      {/* 5-Axis Risk Radar Section */}
+      <section className="pt-2">
+        <RiskRadarChart symbol={symbol} />
+      </section>
 
       {/* Key Statistics Cards */}
       {latestCandle && (
@@ -104,6 +123,14 @@ export default function StockDetailPage() {
           </div>
         </div>
       )}
+
+      {/* Paper Trading Order Ticket Modal */}
+      <OrderModal
+        isOpen={isOrderModalOpen}
+        onClose={() => setIsOrderModalOpen(false)}
+        symbol={symbol}
+        currentPrice={currentPrice}
+      />
     </div>
   );
 }
