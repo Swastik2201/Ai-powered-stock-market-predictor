@@ -1,4 +1,6 @@
+# pyrefly: ignore [missing-import]
 from fastapi import APIRouter, HTTPException, status
+# pyrefly: ignore [missing-import]
 from pydantic import BaseModel
 from typing import List
 from app.services.forecaster import ForecasterService
@@ -25,27 +27,27 @@ class StockForecastResponse(BaseModel):
     disclaimer: str
 
 
-@router.get("/forecast/{symbol}", response_model=StockForecastResponse, status_code=status.HTTP_200_OK)
-async def get_stock_forecast(symbol: str):
+@router.get("/{symbol}", response_model=StockForecastResponse, status_code=status.HTTP_200_OK)
+async def get_symbol_forecast(symbol: str, days: int = 30):
     """
-    Returns 30-day Prophet/Holt-Winters ML time-series forecast corridor along with news sentiment risk index.
+    Generates Prophet 30-day price corridor forecast & news sentiment risk score.
     """
     try:
-        forecast_res = ForecasterService.generate_stock_forecast(symbol, days=30)
-        sentiment_res = SentimentAnalysisService.analyze_news_sentiment(symbol)
+        data = ForecasterService.generate_prophet_corridor(symbol=symbol, days=days)
+        sentiment = SentimentAnalysisService.score_news_sentiment(symbol=symbol)
 
         return StockForecastResponse(
-            symbol=forecast_res["symbol"],
-            last_price=forecast_res["last_price"],
-            forecast_days=forecast_res["forecast_days"],
-            sentiment_score=sentiment_res["sentiment_score"],
-            sentiment_label=sentiment_res["sentiment_label"],
-            risk_level=sentiment_res["risk_level"],
-            forecast=[ForecastPoint(**p) for p in forecast_res["forecast"]],
-            disclaimer="Educational probabilistic projection only. Not financial investment advice.",
+            symbol=data["symbol"],
+            last_price=data["last_price"],
+            forecast_days=data["forecast_days"],
+            sentiment_score=sentiment["sentiment_score"],
+            sentiment_label=sentiment["sentiment_label"],
+            risk_level=sentiment["risk_level"],
+            forecast=data["forecast"],
+            disclaimer="Forecast generated via Prophet time-series ML models. Not financial advice.",
         )
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to generate predictive forecast for {symbol}: {str(e)}",
+            detail=f"Forecast generation failed for symbol {symbol}: {str(e)}",
         )

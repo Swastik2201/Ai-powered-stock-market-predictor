@@ -13,6 +13,8 @@ import { PredictionChartOverlay, ForecastCorridorPoint } from "@/components/dash
 import { RiskMeter } from "@/components/dashboard/RiskMeter";
 import { RiskRadarChart } from "@/components/dashboard/RiskRadarChart";
 import { ClanLeaderboard } from "@/components/dashboard/ClanLeaderboard";
+import { DailyQuizCard } from "@/components/dashboard/DailyQuizCard";
+import { BadgeGallery } from "@/components/dashboard/BadgeGallery";
 import { MarketGeniusDrawer } from "@/components/dashboard/MarketGeniusDrawer";
 import { Button } from "@/components/ui/Button";
 import { AssetItem } from "@/types/market";
@@ -56,7 +58,7 @@ export default function DashboardPage() {
       <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-border pb-4 gap-4">
         <div>
           <h1 className="text-2xl font-extrabold tracking-tight">Financial Intelligence Dashboard</h1>
-          <p className="text-sm text-slate-400">MarketGenius RAG Copilot, Clan Leagues, 5-Axis Risk Radar & Prophet forecasts</p>
+          <p className="text-sm text-slate-400">MarketGenius RAG Copilot, Daily Quiz, Badges, Clan Leagues & 5-Axis Risk Radar</p>
         </div>
         <div className="flex items-center gap-3">
           <Link href="/dashboard/clans">
@@ -117,6 +119,12 @@ export default function DashboardPage() {
             Optimal diversification model
           </div>
         </div>
+      </div>
+
+      {/* Gamification Engine: Daily Financial Quiz & Badges Gallery */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-2">
+        <DailyQuizCard />
+        <BadgeGallery />
       </div>
 
       {/* Multiplayer Clan ROI Leaderboard Section */}

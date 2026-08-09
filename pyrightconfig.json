@@ -1,0 +1,7 @@
+{
+  "extraPaths": [
+    "C:\\Users\\swastik\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages",
+    "apps/api"
+  ],
+  "reportMissingImports": "none"
+}
