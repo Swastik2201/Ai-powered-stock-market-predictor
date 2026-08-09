@@ -30,9 +30,12 @@ app = FastAPI(
 )
 
 
+from app.core.rate_limiter import RateLimitMiddleware
+
 # ------------------------------------------
-# CORS Middleware Configuration
+# Rate Limiter & CORS Middleware Configuration
 # ------------------------------------------
+app.add_middleware(RateLimitMiddleware)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.CORS_ORIGINS,
@@ -40,6 +43,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.get("/health", status_code=status.HTTP_200_OK)
+async def health_check():
+    """Health check probe endpoint for production Docker container readiness."""
+    return {"status": "healthy", "service": "MarketGenius FastAPI Engine", "version": settings.VERSION}
 
 
 # ------------------------------------------

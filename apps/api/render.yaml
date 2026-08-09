@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: marketgenius-fastapi-backend
+    env: docker
+    dockerContext: .
+    dockerfilePath: Dockerfile
+    plan: starter
+    region: singapore
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PROJECT_NAME
+        value: "MarketGenius AI Engine"
+      - key: VERSION
+        value: "1.0.0"
+      - key: PORT
+        value: "8000"
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: REDIS_URL
+        sync: false

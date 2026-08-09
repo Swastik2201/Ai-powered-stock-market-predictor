@@ -17,6 +17,7 @@ import { DailyQuizCard } from "@/components/dashboard/DailyQuizCard";
 import { BadgeGallery } from "@/components/dashboard/BadgeGallery";
 import { MarketGeniusDrawer } from "@/components/dashboard/MarketGeniusDrawer";
 import { UserNav } from "@/components/common/UserNav";
+import { FinancialDisclaimer } from "@/components/common/FinancialDisclaimer";
 import { Button } from "@/components/ui/Button";
 import { AssetItem } from "@/types/market";
 
@@ -54,7 +55,7 @@ export default function DashboardPage() {
   const mockPortfolioValueINR = 10398750.00;
 
   return (
-    <div className="relative min-h-screen bg-background text-slate-100 p-6 space-y-8 max-w-7xl mx-auto">
+    <div className="relative min-h-screen bg-background text-slate-100 p-6 space-y-8 max-w-7xl mx-auto pb-16">
       {/* Header */}
       <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-border pb-4 gap-4">
         <div>
@@ -188,7 +189,7 @@ export default function DashboardPage() {
       {/* Floating Copilot Button (Bottom Right) */}
       <button
         onClick={() => setIsDrawerOpen(true)}
-        className="fixed bottom-6 right-6 p-4 rounded-full bg-aiAccent hover:bg-aiAccent/90 text-white shadow-2xl z-40 flex items-center gap-2 group transition-transform hover:scale-105"
+        className="fixed bottom-16 right-6 p-4 rounded-full bg-aiAccent hover:bg-aiAccent/90 text-white shadow-2xl z-40 flex items-center gap-2 group transition-transform hover:scale-105"
         title="Open MarketGenius AI Chat"
       >
         <Bot className="w-6 h-6 animate-pulse" />
@@ -200,6 +201,9 @@ export default function DashboardPage() {
         isOpen={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
       />
+
+      {/* Sticky Regulatory Disclaimer Banner */}
+      <FinancialDisclaimer />
     </div>
   );
 }
