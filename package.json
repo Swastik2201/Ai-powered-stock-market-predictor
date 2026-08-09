@@ -7,12 +7,15 @@
     "apps/*"
   ],
   "scripts": {
-    "dev": "npm run dev:web",
-    "dev:web": "npm run dev --workspace=apps/web",
+    "dev": "cd apps/web && npx next dev -p 3000",
+    "dev:web": "cd apps/web && npx next dev -p 3000",
     "dev:api": "cd apps/api && uvicorn app.main:app --reload --port 8000",
-    "build:web": "npm run build --workspace=apps/web",
-    "lint:web": "npm run lint --workspace=apps/web",
-    "type-check:web": "npm run type-check --workspace=apps/web"
+    "build:web": "cd apps/web && npx next build",
+    "lint:web": "cd apps/web && npx next lint",
+    "type-check:web": "cd apps/web && npx tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0"
   },
   "keywords": [
     "fintech",
