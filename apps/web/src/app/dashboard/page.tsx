@@ -4,6 +4,7 @@ import { UniversalSearch } from "@/components/dashboard/UniversalSearch";
 import { AssetCategoryTabs } from "@/components/dashboard/AssetCategoryTabs";
 import { IPOIntelligenceHub } from "@/components/dashboard/IPOIntelligenceHub";
 import { IntradayScreener } from "@/components/dashboard/IntradayScreener";
+import { BudgetAllocator } from "@/components/dashboard/BudgetAllocator";
 import { AssetItem } from "@/types/market";
 
 const mockMarketAssets: AssetItem[] = [
@@ -31,7 +32,7 @@ export default function DashboardPage() {
       <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-border pb-4 gap-4">
         <div>
           <h1 className="text-2xl font-extrabold tracking-tight">Financial Intelligence Dashboard</h1>
-          <p className="text-sm text-slate-400">Real-time market discovery, IPO intelligence, breakouts, and portfolio analytics</p>
+          <p className="text-sm text-slate-400">Real-time market discovery, AI budget allocation, IPO hub & breakout screeners</p>
         </div>
         <div className="flex items-center gap-3">
           <span className="px-3 py-1 rounded-full text-xs font-semibold bg-profit/10 text-profit border border-profit/20 flex items-center gap-1">
@@ -77,6 +78,11 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+
+      {/* AI Budget Asset Allocation Engine */}
+      <section className="pt-4">
+        <BudgetAllocator />
+      </section>
 
       {/* Asset Discovery & Categorization Hub */}
       <section className="space-y-4 pt-4">

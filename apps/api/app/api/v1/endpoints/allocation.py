@@ -1,34 +1,23 @@
-from fastapi import APIRouter
-from pydantic import BaseModel
-from typing import Dict
+from fastapi import APIRouter, HTTPException, status
+from app.services.allocator import (
+    BudgetAllocatorService,
+    AllocationRequest,
+    AllocationResponse,
+)
 
 router = APIRouter()
 
 
-class AllocationRequest(BaseModel):
-    risk_tolerance: str = "moderate"
-    investment_amount: float = 10000.0
-    preferred_currency: str = "USD"
-
-
-class AllocationResponse(BaseModel):
-    risk_profile: str
-    allocations: Dict[str, float]
-    recommendations: str
-
-
-@router.post("/optimize", response_model=AllocationResponse)
-async def optimize_allocation(payload: AllocationRequest):
+@router.post("/recommend", response_model=AllocationResponse, status_code=status.HTTP_200_OK)
+async def recommend_budget_allocation(payload: AllocationRequest):
     """
-    Optimizes asset allocation strategy based on risk profile and investment targets.
+    Generates AI Budget Asset Allocation recommendations and computes fractional purchasing units.
     """
-    return AllocationResponse(
-        risk_profile=payload.risk_tolerance,
-        allocations={
-            "equities_tech": 40.0,
-            "bonds": 30.0,
-            "index_funds": 20.0,
-            "crypto_cash": 10.0,
-        },
-        recommendations="Balanced allocation favoring low-cost index funds and defensive bonds."
-    )
+    try:
+        response = BudgetAllocatorService.generate_budget_allocation(payload)
+        return response
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to generate allocation recommendation: {str(e)}",
+        )

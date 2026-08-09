@@ -5,7 +5,6 @@ import {
   createChart,
   IChartApi,
   ISeriesApi,
-  CandlestickSeries,
   ColorType,
   CrosshairMode,
 } from 'lightweight-charts';
@@ -84,7 +83,7 @@ export const StockChart: React.FC<StockChartProps> = ({
     chartRef.current = chart;
 
     // 2. Add Candlestick Series with Bullish (#00E676) and Bearish (#FF5252) Token Colors
-    const candlestickSeries = chart.addSeries(CandlestickSeries, {
+    const candlestickSeries = chart.addCandlestickSeries({
       upColor: '#00E676',
       downColor: '#FF5252',
       borderVisible: false,
