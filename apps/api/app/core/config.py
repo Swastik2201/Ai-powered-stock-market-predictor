@@ -16,6 +16,11 @@ class Settings(BaseSettings):
     SUPABASE_ANON_KEY: str = ""
     DATABASE_URL: str = "postgresql://postgres:postgres@localhost:5432/postgres"
 
+    # Caching & Market Refresh settings
+    REDIS_URL: str = "redis://localhost:6379/0"
+    CACHE_TTL_SECONDS: int = 15
+    MARKET_REFRESH_INTERVAL_SECONDS: int = 10
+
     # CORS configuration
     CORS_ORIGINS: List[str] = ["http://localhost:3000"]
 

@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -6,12 +7,28 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.core.config import settings
 from app.api.v1.router import api_router
+from app.services.cache_service import cache_service
+from app.services.background_worker import background_worker
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup: Connect to cache server and launch quote background refresh worker
+    await cache_service.connect()
+    background_worker.start()
+    yield
+    # Shutdown: Stop worker and disconnect cache
+    await background_worker.stop()
+    await cache_service.disconnect()
+
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
+    lifespan=lifespan,
 )
+
 
 # ------------------------------------------
 # CORS Middleware Configuration
