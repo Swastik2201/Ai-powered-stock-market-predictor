@@ -2,6 +2,8 @@ import { formatINR, formatUSD } from "@/lib/utils";
 import { TrendingUp, ArrowUpRight, ShieldCheck, Cpu } from "lucide-react";
 import { UniversalSearch } from "@/components/dashboard/UniversalSearch";
 import { AssetCategoryTabs } from "@/components/dashboard/AssetCategoryTabs";
+import { IPOIntelligenceHub } from "@/components/dashboard/IPOIntelligenceHub";
+import { IntradayScreener } from "@/components/dashboard/IntradayScreener";
 import { AssetItem } from "@/types/market";
 
 const mockMarketAssets: AssetItem[] = [
@@ -16,7 +18,7 @@ const mockMarketAssets: AssetItem[] = [
   { symbol: "HDFC_MID", name: "HDFC Mid-Cap Opportunities", asset_type: "mutual_fund", category: "Mid Cap", current_price: 145.80, day_change_pct: 1.15 },
   { symbol: "GOLDBEES", name: "Nippon India ETF Gold BeES", asset_type: "commodity", category: "Precious Metal", current_price: 64.20, day_change_pct: 0.15 },
   { symbol: "SILVERBEES", name: "Nippon India ETF Silver BeES", asset_type: "commodity", category: "Precious Metal", current_price: 88.50, day_change_pct: -0.80 },
-  { symbol: "SWIGGY_IPO", name: "Swiggy Limited IPO", asset_type: "ipo", category: "Upcoming", current_price: 390.00, day_change_pct: 4.50 },
+  { symbol: "SWIGGY", name: "Swiggy Limited IPO", asset_type: "ipo", category: "Upcoming", current_price: 390.00, day_change_pct: 4.50 },
 ];
 
 export default function DashboardPage() {
@@ -29,7 +31,7 @@ export default function DashboardPage() {
       <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-border pb-4 gap-4">
         <div>
           <h1 className="text-2xl font-extrabold tracking-tight">Financial Intelligence Dashboard</h1>
-          <p className="text-sm text-slate-400">Real-time market discovery, forecasts, and portfolio analytics</p>
+          <p className="text-sm text-slate-400">Real-time market discovery, IPO intelligence, breakouts, and portfolio analytics</p>
         </div>
         <div className="flex items-center gap-3">
           <span className="px-3 py-1 rounded-full text-xs font-semibold bg-profit/10 text-profit border border-profit/20 flex items-center gap-1">
@@ -82,6 +84,16 @@ export default function DashboardPage() {
           Multi-Asset Market Discovery
         </h2>
         <AssetCategoryTabs assets={mockMarketAssets} />
+      </section>
+
+      {/* IPO Intelligence Hub Section */}
+      <section className="pt-4">
+        <IPOIntelligenceHub />
+      </section>
+
+      {/* Intraday Breakouts & Momentum Screener Section */}
+      <section className="pt-4">
+        <IntradayScreener />
       </section>
 
       {/* Main Grid: Forecasts & AI Genius */}
