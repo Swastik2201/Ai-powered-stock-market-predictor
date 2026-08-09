@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "@/styles/globals.css";
+import { Navbar } from "@/components/common/Navbar";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -15,8 +16,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AI Financial & Stock Market Predictor",
-  description: "Advanced AI-powered financial analytics, stock market forecasting, and portfolio allocation.",
+  title: "MarketGenius AI • Stock Market Predictor & Trading Engine",
+  description: "Advanced AI-powered financial analytics, Prophet stock forecasting, and paper trading suite.",
 };
 
 export default function RootLayout({
@@ -26,8 +27,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable} dark`}>
-      <body className="bg-background text-slate-100 antialiased min-h-screen font-sans">
-        {children}
+      <body className="bg-background text-slate-100 antialiased min-h-screen font-sans bg-grid-pattern selection:bg-aiAccent/30 selection:text-white">
+        <Navbar />
+        <main className="w-full min-h-[calc(100vh-4rem)]">
+          {children}
+        </main>
       </body>
     </html>
   );

@@ -3,65 +3,99 @@
 @tailwind utilities;
 
 :root {
-  --background: #0B0E14;
-  --surface: #161B22;
-  --border: #21262D;
-  --profit: #00E676;
-  --loss: #FF5252;
-  --aiAccent: #8A2BE2;
-  --gold: #FFD700;
+  --background: #090C10;
+  --surface: #131720;
+  --border: #1F2430;
+  --profit: #10B981;
+  --loss: #F43F5E;
+  --aiAccent: #9D4EDD;
+  --gold: #F59E0B;
 }
 
 body {
-  color: #F0F6FC;
+  color: #F3F4F6;
   background-color: var(--background);
-  font-family: var(--font-inter), sans-serif;
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   min-height: 100vh;
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(157, 78, 221, 0.08) 0%, transparent 60%),
+    radial-gradient(circle at 100% 100%, rgba(16, 185, 129, 0.04) 0%, transparent 50%);
+  background-attachment: fixed;
 }
 
-/* Glassmorphism Card Utility */
+/* Subtle Tech Grid Background Overlay */
+.bg-grid-pattern {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+}
+
+/* Ultra Glassmorphism Card Utility */
 .glass-card {
-  background-color: rgba(22, 27, 34, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid #21262D;
-  border-radius: 0.75rem;
+  background: rgba(19, 23, 32, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+}
+
+.glass-card-hover {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card-hover:hover {
+  transform: translateY(-2px);
+  border-color: rgba(157, 78, 221, 0.3);
+  box-shadow: 0 25px 50px -12px rgba(157, 78, 221, 0.15);
 }
 
 /* AI Glowing Container Accent */
 .glow-ai {
-  border: 1px solid rgba(138, 43, 226, 0.6);
-  box-shadow: 0 0 15px rgba(138, 43, 226, 0.25), inset 0 0 10px rgba(138, 43, 226, 0.1);
+  border: 1px solid rgba(157, 78, 221, 0.5);
+  box-shadow: 0 0 20px rgba(157, 78, 221, 0.25), inset 0 0 15px rgba(157, 78, 221, 0.1);
 }
 
 /* Profit Metric Glow */
 .glow-profit {
-  border-color: rgba(0, 230, 118, 0.4);
-  box-shadow: 0 0 15px rgba(0, 230, 118, 0.15);
+  border-color: rgba(16, 185, 129, 0.4);
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
 }
 
 /* Loss Metric Glow */
 .glow-loss {
-  border-color: rgba(255, 82, 82, 0.4);
-  box-shadow: 0 0 15px rgba(255, 82, 82, 0.15);
+  border-color: rgba(244, 63, 94, 0.4);
+  box-shadow: 0 0 20px rgba(244, 63, 94, 0.15);
 }
 
-/* Financial Scrollbar */
+/* Gold Trophy Glow */
+.glow-gold {
+  border-color: rgba(245, 158, 11, 0.5);
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.2);
+}
+
+/* Modern Financial Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0B0E14;
+  background: #090C10;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #21262D;
-  border-radius: 3px;
+  background: #1F2430;
+  border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #30363D;
+  background: #374151;
+}
+
+/* Smooth Touch Scrolling for Mobile */
+.touch-scroll {
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x pan-y;
 }

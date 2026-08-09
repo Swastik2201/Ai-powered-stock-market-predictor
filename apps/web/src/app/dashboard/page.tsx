@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { formatINR, formatUSD } from "@/lib/utils";
-import { TrendingUp, ArrowUpRight, ShieldCheck, Cpu, MessageSquare, Bot, Sparkles, Trophy, Users } from "lucide-react";
+import { TrendingUp, ArrowUpRight, ShieldCheck, Cpu, MessageSquare, Bot, Sparkles, Trophy, Users, BarChart3, Activity, Zap, RefreshCw } from "lucide-react";
 import { UniversalSearch } from "@/components/dashboard/UniversalSearch";
 import { AssetCategoryTabs } from "@/components/dashboard/AssetCategoryTabs";
 import { IPOIntelligenceHub } from "@/components/dashboard/IPOIntelligenceHub";
@@ -16,10 +16,10 @@ import { ClanLeaderboard } from "@/components/dashboard/ClanLeaderboard";
 import { DailyQuizCard } from "@/components/dashboard/DailyQuizCard";
 import { BadgeGallery } from "@/components/dashboard/BadgeGallery";
 import { MarketGeniusDrawer } from "@/components/dashboard/MarketGeniusDrawer";
-import { UserNav } from "@/components/common/UserNav";
 import { FinancialDisclaimer } from "@/components/common/FinancialDisclaimer";
 import { Button } from "@/components/ui/Button";
 import { AssetItem } from "@/types/market";
+import { triggerQuizConfetti } from "@/lib/confetti";
 
 const mockMarketAssets: AssetItem[] = [
   { symbol: "NIFTY50", name: "Nifty 50 Index", asset_type: "index", category: "Benchmark", current_price: 24320.50, day_change_pct: 0.85 },
@@ -55,101 +55,157 @@ export default function DashboardPage() {
   const mockPortfolioValueINR = 10398750.00;
 
   return (
-    <div className="relative min-h-screen bg-background text-slate-100 p-6 space-y-8 max-w-7xl mx-auto pb-16">
-      {/* Header */}
-      <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-border pb-4 gap-4">
-        <div>
-          <h1 className="text-2xl font-extrabold tracking-tight">Financial Intelligence Dashboard</h1>
-          <p className="text-sm text-slate-400">MarketGenius RAG Copilot, Daily Quiz, Badges, Clan Leagues & 5-Axis Risk Radar</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <Link href="/dashboard/clans">
-            <Button variant="outline" className="border-gold/40 text-gold hover:bg-gold/10 font-semibold flex items-center gap-2">
-              <Trophy className="w-4 h-4 text-gold" />
-              Clan Leagues
+    <div className="min-h-screen bg-background text-slate-100 p-6 lg:p-8 space-y-10 max-w-7xl mx-auto pb-20">
+      {/* Modern Hero Welcome Banner */}
+      <section className="p-8 rounded-3xl bg-gradient-to-r from-surface via-surface/90 to-aiAccent/10 border border-border/80 shadow-2xl relative overflow-hidden space-y-6">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-aiAccent/10 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute bottom-0 left-1/3 w-64 h-64 bg-profit/5 rounded-full blur-[80px] pointer-events-none" />
+
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 relative z-10">
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <span className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-aiAccent/15 text-aiAccent border border-aiAccent/30 flex items-center gap-1.5">
+                <Zap className="w-3.5 h-3.5 text-aiAccent" />
+                Live Predictive Terminal
+              </span>
+              <span className="text-xs text-slate-400 font-mono">Market Session Open</span>
+            </div>
+            <h1 className="text-3xl lg:text-4xl font-extrabold tracking-tight text-white">
+              Financial Intelligence Hub
+            </h1>
+            <p className="text-sm text-slate-400 max-w-2xl">
+              Prophet time-series forecasting, 5-axis risk radar analytics, multiplayer leagues, and RAG copilot.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3">
+            <Link href="/dashboard/clans">
+              <Button variant="outline" className="border-gold/40 text-gold hover:bg-gold/10 font-semibold flex items-center gap-2 py-2.5 px-4 shadow-lg shadow-gold/5">
+                <Trophy className="w-4 h-4 text-gold" />
+                Clan Leagues
+              </Button>
+            </Link>
+
+            <Button
+              onClick={() => setIsDrawerOpen(true)}
+              className="bg-aiAccent hover:bg-aiAccent/90 text-white font-semibold flex items-center gap-2 py-2.5 px-5 shadow-xl shadow-aiAccent/25"
+            >
+              <Bot className="w-4 h-4" />
+              Ask MarketGenius AI
+              <Sparkles className="w-3.5 h-3.5" />
             </Button>
-          </Link>
-
-          <Button
-            onClick={() => setIsDrawerOpen(true)}
-            className="bg-aiAccent hover:bg-aiAccent/80 text-white font-semibold flex items-center gap-2 shadow-lg shadow-aiAccent/20"
-          >
-            <Bot className="w-4 h-4" />
-            Ask MarketGenius AI
-            <Sparkles className="w-3.5 h-3.5" />
-          </Button>
-
-          <span className="px-3 py-1 rounded-full text-xs font-semibold bg-profit/10 text-profit border border-profit/20 flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full bg-profit animate-pulse" />
-            Live Market Feed
-          </span>
-
-          <UserNav />
+          </div>
         </div>
-      </header>
+
+        {/* Live Market Insights Ticker Strip */}
+        <div className="p-3.5 rounded-xl bg-background/60 border border-border/60 flex items-center justify-between text-xs font-mono text-slate-300 gap-4 overflow-x-auto touch-scroll">
+          <span className="flex items-center gap-2 shrink-0">
+            <Activity className="w-4 h-4 text-profit" />
+            <strong className="text-slate-200">NIFTY50:</strong> 24,320.50 (+0.85%)
+          </span>
+          <span className="shrink-0 text-slate-500">•</span>
+          <span className="flex items-center gap-2 shrink-0">
+            <strong className="text-slate-200">RELIANCE Prophet 30D:</strong> ₹3,105.00 (+4.2%)
+          </span>
+          <span className="shrink-0 text-slate-500">•</span>
+          <span className="flex items-center gap-2 shrink-0">
+            <strong className="text-slate-200">FII Net Inflow:</strong> +₹2,450 Cr
+          </span>
+          <span className="shrink-0 text-slate-500">•</span>
+          <span className="flex items-center gap-2 shrink-0">
+            <strong className="text-slate-200">India VIX:</strong> 13.20 (-2.1%)
+          </span>
+        </div>
+      </section>
 
       {/* Universal Fuzzy Search Bar (Cmd+K) */}
       <UniversalSearch initialAssets={mockMarketAssets} />
 
-      {/* Portfolio Overview Cards */}
+      {/* Glassmorphic Portfolio Stat Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="p-6 rounded-xl bg-surface border border-border space-y-2">
-          <span className="text-sm font-medium text-slate-400">Total Portfolio Value (USD)</span>
-          <div className="text-3xl font-extrabold text-white">
+        <div className="p-6 rounded-2xl bg-surface border border-border/80 shadow-xl glass-card-hover space-y-3 relative overflow-hidden">
+          <span className="text-xs font-bold text-slate-400 uppercase tracking-wider font-mono">
+            Total Portfolio Value (USD)
+          </span>
+          <div className="text-3xl font-extrabold text-white tracking-tight">
             {formatUSD(mockPortfolioValueUSD)}
           </div>
-          <div className="flex items-center gap-1 text-xs font-semibold text-profit">
-            <ArrowUpRight className="w-4 h-4" />
-            +4.25% today
+          <div className="flex items-center justify-between pt-1">
+            <span className="flex items-center gap-1 text-xs font-bold text-profit bg-profit/10 px-2.5 py-1 rounded-full border border-profit/20">
+              <ArrowUpRight className="w-3.5 h-3.5" />
+              +4.25% today
+            </span>
+            <span className="text-[11px] text-slate-400 font-mono">Live NAV Valuation</span>
           </div>
         </div>
 
-        <div className="p-6 rounded-xl bg-surface border border-border space-y-2">
-          <span className="text-sm font-medium text-slate-400">Total Portfolio Value (INR)</span>
-          <div className="text-3xl font-extrabold text-white">
+        <div className="p-6 rounded-2xl bg-surface border border-border/80 shadow-xl glass-card-hover space-y-3 relative overflow-hidden">
+          <span className="text-xs font-bold text-slate-400 uppercase tracking-wider font-mono">
+            Total Portfolio Value (INR)
+          </span>
+          <div className="text-3xl font-extrabold text-white tracking-tight">
             {formatINR(mockPortfolioValueINR)}
           </div>
-          <div className="flex items-center gap-1 text-xs font-semibold text-profit">
-            <ArrowUpRight className="w-4 h-4" />
-            +₹42,350 estimated gain
+          <div className="flex items-center justify-between pt-1">
+            <span className="flex items-center gap-1 text-xs font-bold text-profit bg-profit/10 px-2.5 py-1 rounded-full border border-profit/20">
+              <ArrowUpRight className="w-3.5 h-3.5" />
+              +₹42,350 gain
+            </span>
+            <span className="text-[11px] text-slate-400 font-mono">Paper Ledger</span>
           </div>
         </div>
 
-        <div className="p-6 rounded-xl bg-surface border border-border space-y-2">
-          <span className="text-sm font-medium text-slate-400">AI Risk Score</span>
-          <div className="text-3xl font-extrabold text-gold">Low / Moderate</div>
-          <div className="flex items-center gap-1 text-xs text-slate-400">
-            <ShieldCheck className="w-4 h-4 text-gold" />
-            Optimal diversification model
+        <div className="p-6 rounded-2xl bg-surface border border-border/80 shadow-xl glass-card-hover space-y-3 relative overflow-hidden">
+          <span className="text-xs font-bold text-slate-400 uppercase tracking-wider font-mono">
+            AI Risk Meter Score
+          </span>
+          <div className="text-3xl font-extrabold text-gold tracking-tight">
+            72.5 / 100
+          </div>
+          <div className="flex items-center justify-between pt-1">
+            <span className="flex items-center gap-1.5 text-xs text-gold font-bold bg-gold/10 px-2.5 py-1 rounded-full border border-gold/20">
+              <ShieldCheck className="w-3.5 h-3.5 text-gold" />
+              Low Volatility Risk
+            </span>
+            <span className="text-[11px] text-slate-400 font-mono">Optimized</span>
           </div>
         </div>
       </div>
 
       {/* Gamification Engine: Daily Financial Quiz & Badges Gallery */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-2">
-        <DailyQuizCard />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <DailyQuizCard onRewardClaimed={() => triggerQuizConfetti()} />
         <BadgeGallery />
       </div>
 
       {/* Multiplayer Clan ROI Leaderboard Section */}
-      <section className="pt-2">
+      <section className="space-y-4">
+        <div className="flex items-center justify-between border-b border-border/60 pb-3">
+          <h2 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+            <Trophy className="w-5 h-5 text-gold" />
+            Social League Standings
+          </h2>
+          <Link href="/dashboard/clans" className="text-xs text-gold hover:underline font-semibold font-mono">
+            View All Clans →
+          </Link>
+        </div>
         <ClanLeaderboard clanId="clan-1" />
       </section>
 
       {/* 5-Axis Quantitative Risk Radar Chart Section */}
-      <section className="pt-2">
+      <section className="space-y-4">
         <RiskRadarChart symbol="RELIANCE" />
       </section>
 
       {/* Main ML Forecast Corridor & Risk Meter Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-2">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Prophet Prediction Corridor Overlay Chart */}
         <div className="lg:col-span-2">
           <PredictionChartOverlay
             symbol="RELIANCE"
             forecastData={mockForecastCorridor}
             currentPrice={2980.00}
-            height={360}
+            height={380}
           />
         </div>
 
@@ -164,32 +220,32 @@ export default function DashboardPage() {
       </div>
 
       {/* AI Budget Asset Allocation Engine */}
-      <section className="pt-4">
+      <section>
         <BudgetAllocator />
       </section>
 
       {/* Asset Discovery & Categorization Hub */}
-      <section className="space-y-4 pt-4">
-        <h2 className="text-xl font-bold tracking-tight border-b border-border/40 pb-2">
-          Multi-Asset Market Discovery
+      <section className="space-y-4">
+        <h2 className="text-xl font-bold tracking-tight border-b border-border/60 pb-3 text-white">
+          Multi-Asset Discovery Hub
         </h2>
         <AssetCategoryTabs assets={mockMarketAssets} />
       </section>
 
       {/* IPO Intelligence Hub Section */}
-      <section className="pt-4">
+      <section>
         <IPOIntelligenceHub />
       </section>
 
       {/* Intraday Breakouts & Momentum Screener Section */}
-      <section className="pt-4">
+      <section>
         <IntradayScreener />
       </section>
 
       {/* Floating Copilot Button (Bottom Right) */}
       <button
         onClick={() => setIsDrawerOpen(true)}
-        className="fixed bottom-16 right-6 p-4 rounded-full bg-aiAccent hover:bg-aiAccent/90 text-white shadow-2xl z-40 flex items-center gap-2 group transition-transform hover:scale-105"
+        className="fixed bottom-16 right-6 p-4 rounded-full bg-aiAccent hover:bg-aiAccent/90 text-white shadow-2xl z-40 flex items-center gap-2 group transition-all hover:scale-105 border border-aiAccent/40"
         title="Open MarketGenius AI Chat"
       >
         <Bot className="w-6 h-6 animate-pulse" />
