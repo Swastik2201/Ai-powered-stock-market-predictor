@@ -1,51 +1,51 @@
-# pyrefly: ignore [missing-import]
-from fastapi import APIRouter
-# pyrefly: ignore [missing-import]
+from fastapi import APIRouter, HTTPException, status
 from pydantic import BaseModel
 from typing import List
+from app.services.forecaster import ForecasterService
+from app.services.sentiment import SentimentAnalysisService
 
 router = APIRouter()
 
 
-class ForecastRequest(BaseModel):
-    ticker: str = "AAPL"
-    forecast_days: int = 30
-
-
-class PricePoint(BaseModel):
+class ForecastPoint(BaseModel):
     date: str
-    predicted_price: float
-    lower_bound: float
-    upper_bound: float
+    yhat_lower: float
+    yhat: float
+    yhat_upper: float
 
 
-class ForecastResponse(BaseModel):
-    ticker: str
-    days: int
-    forecast: List[PricePoint]
+class StockForecastResponse(BaseModel):
+    symbol: str
+    last_price: float
+    forecast_days: int
+    sentiment_score: float
+    sentiment_label: str
+    risk_level: str
+    forecast: List[ForecastPoint]
+    disclaimer: str
 
 
-@router.post("/predict", response_model=ForecastResponse)
-async def predict_stock_trend(payload: ForecastRequest):
+@router.get("/forecast/{symbol}", response_model=StockForecastResponse, status_code=status.HTTP_200_OK)
+async def get_stock_forecast(symbol: str):
     """
-    Generates time-series stock price predictions using Prophet model.
+    Returns 30-day Prophet/Holt-Winters ML time-series forecast corridor along with news sentiment risk index.
     """
-    # Sample mock forecast data points
-    return ForecastResponse(
-        ticker=payload.ticker.upper(),
-        days=payload.forecast_days,
-        forecast=[
-            PricePoint(
-                date="2026-08-10",
-                predicted_price=225.50,
-                lower_bound=220.00,
-                upper_bound=231.00
-            ),
-            PricePoint(
-                date="2026-08-11",
-                predicted_price=227.10,
-                lower_bound=221.50,
-                upper_bound=232.70
-            )
-        ]
-    )
+    try:
+        forecast_res = ForecasterService.generate_stock_forecast(symbol, days=30)
+        sentiment_res = SentimentAnalysisService.analyze_news_sentiment(symbol)
+
+        return StockForecastResponse(
+            symbol=forecast_res["symbol"],
+            last_price=forecast_res["last_price"],
+            forecast_days=forecast_res["forecast_days"],
+            sentiment_score=sentiment_res["sentiment_score"],
+            sentiment_label=sentiment_res["sentiment_label"],
+            risk_level=sentiment_res["risk_level"],
+            forecast=[ForecastPoint(**p) for p in forecast_res["forecast"]],
+            disclaimer="Educational probabilistic projection only. Not financial investment advice.",
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to generate predictive forecast for {symbol}: {str(e)}",
+        )

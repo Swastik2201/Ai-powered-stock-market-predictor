@@ -5,6 +5,8 @@ import { AssetCategoryTabs } from "@/components/dashboard/AssetCategoryTabs";
 import { IPOIntelligenceHub } from "@/components/dashboard/IPOIntelligenceHub";
 import { IntradayScreener } from "@/components/dashboard/IntradayScreener";
 import { BudgetAllocator } from "@/components/dashboard/BudgetAllocator";
+import { PredictionChartOverlay, ForecastCorridorPoint } from "@/components/dashboard/PredictionChartOverlay";
+import { RiskMeter } from "@/components/dashboard/RiskMeter";
 import { AssetItem } from "@/types/market";
 
 const mockMarketAssets: AssetItem[] = [
@@ -22,6 +24,19 @@ const mockMarketAssets: AssetItem[] = [
   { symbol: "SWIGGY", name: "Swiggy Limited IPO", asset_type: "ipo", category: "Upcoming", current_price: 390.00, day_change_pct: 4.50 },
 ];
 
+const mockForecastCorridor: ForecastCorridorPoint[] = Array.from({ length: 30 }, (_, i) => {
+  const d = new Date();
+  d.setDate(d.getDate() + i + 1);
+  const base = 2980.00 + i * 2.5;
+  const spread = 25.0 + i * 1.8;
+  return {
+    date: d.toISOString().split("T")[0],
+    yhat: Number(base.toFixed(2)),
+    yhat_lower: Number((base - spread).toFixed(2)),
+    yhat_upper: Number((base + spread).toFixed(2)),
+  };
+});
+
 export default function DashboardPage() {
   const mockPortfolioValueUSD = 124500.50;
   const mockPortfolioValueINR = 10398750.00;
@@ -32,7 +47,7 @@ export default function DashboardPage() {
       <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-border pb-4 gap-4">
         <div>
           <h1 className="text-2xl font-extrabold tracking-tight">Financial Intelligence Dashboard</h1>
-          <p className="text-sm text-slate-400">Real-time market discovery, AI budget allocation, IPO hub & breakout screeners</p>
+          <p className="text-sm text-slate-400">Prophet predictive forecasts, news sentiment risk meter, budget allocation & IPO hub</p>
         </div>
         <div className="flex items-center gap-3">
           <span className="px-3 py-1 rounded-full text-xs font-semibold bg-profit/10 text-profit border border-profit/20 flex items-center gap-1">
@@ -79,6 +94,28 @@ export default function DashboardPage() {
         </div>
       </div>
 
+      {/* Main ML Forecast Corridor & Risk Meter Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-4">
+        {/* Prophet Prediction Corridor Overlay Chart */}
+        <div className="lg:col-span-2">
+          <PredictionChartOverlay
+            symbol="RELIANCE"
+            forecastData={mockForecastCorridor}
+            currentPrice={2980.00}
+            height={360}
+          />
+        </div>
+
+        {/* Visual Risk & News Sentiment Meter */}
+        <div>
+          <RiskMeter
+            score={72.5}
+            sentimentLabel="Bullish"
+            riskLevel="Low Volatility Risk"
+          />
+        </div>
+      </div>
+
       {/* AI Budget Asset Allocation Engine */}
       <section className="pt-4">
         <BudgetAllocator />
@@ -101,40 +138,6 @@ export default function DashboardPage() {
       <section className="pt-4">
         <IntradayScreener />
       </section>
-
-      {/* Main Grid: Forecasts & AI Genius */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-4">
-        {/* Forecast chart area placeholder */}
-        <div className="lg:col-span-2 p-6 rounded-xl bg-surface border border-border space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-bold flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-profit" />
-              Stock Market Forecast Engine (Prophet)
-            </h2>
-          </div>
-          <div className="h-64 rounded-lg bg-background/50 border border-border/50 flex items-center justify-center text-slate-500 text-sm">
-            [ Interactive Prophet Time-Series Forecast Chart Placeholder ]
-          </div>
-        </div>
-
-        {/* AI Genius Panel placeholder */}
-        <div className="p-6 rounded-xl bg-surface border border-border space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-bold flex items-center gap-2 text-aiAccent">
-              <Cpu className="w-5 h-5 text-aiAccent" />
-              AI Genius Copilot
-            </h2>
-          </div>
-          <div className="space-y-3 text-sm text-slate-300">
-            <div className="p-3 rounded-lg bg-background border border-border">
-              "Market sentiment on tech sector remains bullish due to strong quarterly earnings."
-            </div>
-            <div className="p-3 rounded-lg bg-background border border-border">
-              "Recommended rebalancing: Reallocate 5% from high-volatility equities to index funds."
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
