@@ -1,17 +1,35 @@
 import { formatINR, formatUSD } from "@/lib/utils";
 import { TrendingUp, ArrowUpRight, ShieldCheck, Cpu } from "lucide-react";
+import { UniversalSearch } from "@/components/dashboard/UniversalSearch";
+import { AssetCategoryTabs } from "@/components/dashboard/AssetCategoryTabs";
+import { AssetItem } from "@/types/market";
+
+const mockMarketAssets: AssetItem[] = [
+  { symbol: "NIFTY50", name: "Nifty 50 Index", asset_type: "index", category: "Benchmark", current_price: 24320.50, day_change_pct: 0.85 },
+  { symbol: "SENSEX", name: "BSE Sensex", asset_type: "index", category: "Benchmark", current_price: 79850.10, day_change_pct: 0.72 },
+  { symbol: "BANKNIFTY", name: "Nifty Bank", asset_type: "index", category: "Sectoral", current_price: 52100.00, day_change_pct: -0.35 },
+  { symbol: "RELIANCE", name: "Reliance Industries Ltd", asset_type: "stock", category: "Large Cap", current_price: 2980.00, day_change_pct: 1.45 },
+  { symbol: "TCS", name: "Tata Consultancy Services", asset_type: "stock", category: "Large Cap", current_price: 4210.00, day_change_pct: 0.95 },
+  { symbol: "INFY", name: "Infosys Limited", asset_type: "stock", category: "Large Cap", current_price: 1820.00, day_change_pct: -0.40 },
+  { symbol: "PARAG_FLEXI", name: "Parag Parikh Flexi Cap Fund", asset_type: "mutual_fund", category: "Flexi Cap", current_price: 72.40, day_change_pct: 0.60 },
+  { symbol: "QUANT_SMALL", name: "Quant Small Cap Fund", asset_type: "mutual_fund", category: "Small Cap", current_price: 260.15, day_change_pct: 2.10 },
+  { symbol: "HDFC_MID", name: "HDFC Mid-Cap Opportunities", asset_type: "mutual_fund", category: "Mid Cap", current_price: 145.80, day_change_pct: 1.15 },
+  { symbol: "GOLDBEES", name: "Nippon India ETF Gold BeES", asset_type: "commodity", category: "Precious Metal", current_price: 64.20, day_change_pct: 0.15 },
+  { symbol: "SILVERBEES", name: "Nippon India ETF Silver BeES", asset_type: "commodity", category: "Precious Metal", current_price: 88.50, day_change_pct: -0.80 },
+  { symbol: "SWIGGY_IPO", name: "Swiggy Limited IPO", asset_type: "ipo", category: "Upcoming", current_price: 390.00, day_change_pct: 4.50 },
+];
 
 export default function DashboardPage() {
-  const mockPortfolioValueUSD = 124500.5;
-  const mockPortfolioValueINR = 10398750.0;
+  const mockPortfolioValueUSD = 124500.50;
+  const mockPortfolioValueINR = 10398750.00;
 
   return (
-    <div className="min-h-screen bg-background text-slate-100 p-6 space-y-8">
+    <div className="min-h-screen bg-background text-slate-100 p-6 space-y-8 max-w-7xl mx-auto">
       {/* Header */}
       <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-border pb-4 gap-4">
         <div>
           <h1 className="text-2xl font-extrabold tracking-tight">Financial Intelligence Dashboard</h1>
-          <p className="text-sm text-slate-400">Real-time forecasts, portfolio allocation, and AI copilot insights</p>
+          <p className="text-sm text-slate-400">Real-time market discovery, forecasts, and portfolio analytics</p>
         </div>
         <div className="flex items-center gap-3">
           <span className="px-3 py-1 rounded-full text-xs font-semibold bg-profit/10 text-profit border border-profit/20 flex items-center gap-1">
@@ -20,6 +38,9 @@ export default function DashboardPage() {
           </span>
         </div>
       </header>
+
+      {/* Universal Fuzzy Search Bar (Cmd+K) */}
+      <UniversalSearch initialAssets={mockMarketAssets} />
 
       {/* Portfolio Overview Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -55,8 +76,16 @@ export default function DashboardPage() {
         </div>
       </div>
 
+      {/* Asset Discovery & Categorization Hub */}
+      <section className="space-y-4 pt-4">
+        <h2 className="text-xl font-bold tracking-tight border-b border-border/40 pb-2">
+          Multi-Asset Market Discovery
+        </h2>
+        <AssetCategoryTabs assets={mockMarketAssets} />
+      </section>
+
       {/* Main Grid: Forecasts & AI Genius */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-4">
         {/* Forecast chart area placeholder */}
         <div className="lg:col-span-2 p-6 rounded-xl bg-surface border border-border space-y-4">
           <div className="flex items-center justify-between">
