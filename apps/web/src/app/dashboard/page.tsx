@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { formatINR, formatUSD } from "@/lib/utils";
-import { TrendingUp, ArrowUpRight, ShieldCheck, Cpu, MessageSquare, Bot, Sparkles } from "lucide-react";
+import { TrendingUp, ArrowUpRight, ShieldCheck, Cpu, MessageSquare, Bot, Sparkles, Trophy, Users } from "lucide-react";
 import { UniversalSearch } from "@/components/dashboard/UniversalSearch";
 import { AssetCategoryTabs } from "@/components/dashboard/AssetCategoryTabs";
 import { IPOIntelligenceHub } from "@/components/dashboard/IPOIntelligenceHub";
@@ -11,6 +12,7 @@ import { BudgetAllocator } from "@/components/dashboard/BudgetAllocator";
 import { PredictionChartOverlay, ForecastCorridorPoint } from "@/components/dashboard/PredictionChartOverlay";
 import { RiskMeter } from "@/components/dashboard/RiskMeter";
 import { RiskRadarChart } from "@/components/dashboard/RiskRadarChart";
+import { ClanLeaderboard } from "@/components/dashboard/ClanLeaderboard";
 import { MarketGeniusDrawer } from "@/components/dashboard/MarketGeniusDrawer";
 import { Button } from "@/components/ui/Button";
 import { AssetItem } from "@/types/market";
@@ -54,9 +56,16 @@ export default function DashboardPage() {
       <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-border pb-4 gap-4">
         <div>
           <h1 className="text-2xl font-extrabold tracking-tight">Financial Intelligence Dashboard</h1>
-          <p className="text-sm text-slate-400">MarketGenius RAG Copilot, 5-Axis Risk Radar, Prophet forecasts, budget allocation & IPO hub</p>
+          <p className="text-sm text-slate-400">MarketGenius RAG Copilot, Clan Leagues, 5-Axis Risk Radar & Prophet forecasts</p>
         </div>
         <div className="flex items-center gap-3">
+          <Link href="/dashboard/clans">
+            <Button variant="outline" className="border-gold/40 text-gold hover:bg-gold/10 font-semibold flex items-center gap-2">
+              <Trophy className="w-4 h-4 text-gold" />
+              Clan Leagues
+            </Button>
+          </Link>
+
           <Button
             onClick={() => setIsDrawerOpen(true)}
             className="bg-aiAccent hover:bg-aiAccent/80 text-white font-semibold flex items-center gap-2 shadow-lg shadow-aiAccent/20"
@@ -110,13 +119,18 @@ export default function DashboardPage() {
         </div>
       </div>
 
+      {/* Multiplayer Clan ROI Leaderboard Section */}
+      <section className="pt-2">
+        <ClanLeaderboard clanId="clan-1" />
+      </section>
+
       {/* 5-Axis Quantitative Risk Radar Chart Section */}
-      <section className="pt-4">
+      <section className="pt-2">
         <RiskRadarChart symbol="RELIANCE" />
       </section>
 
       {/* Main ML Forecast Corridor & Risk Meter Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-2">
         {/* Prophet Prediction Corridor Overlay Chart */}
         <div className="lg:col-span-2">
           <PredictionChartOverlay
