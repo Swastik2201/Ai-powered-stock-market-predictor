@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #0B0E14;
+  --surface: #161B22;
+  --border: #21262D;
+  --profit: #00E676;
+  --loss: #FF5252;
+  --aiAccent: #8A2BE2;
+  --gold: #FFD700;
+}
+
+body {
+  color: #F0F6FC;
+  background-color: var(--background);
+  min-height: 100vh;
+  font-feature-settings: "rlig" 1, "calt" 1;
+}
+
+/* Custom scrollbar styling for sleek dark financial UI */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0B0E14;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #21262D;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #30363D;
+}
