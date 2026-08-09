@@ -1,5 +1,8 @@
+'use client';
+
+import React, { useState } from "react";
 import { formatINR, formatUSD } from "@/lib/utils";
-import { TrendingUp, ArrowUpRight, ShieldCheck, Cpu } from "lucide-react";
+import { TrendingUp, ArrowUpRight, ShieldCheck, Cpu, MessageSquare, Bot, Sparkles } from "lucide-react";
 import { UniversalSearch } from "@/components/dashboard/UniversalSearch";
 import { AssetCategoryTabs } from "@/components/dashboard/AssetCategoryTabs";
 import { IPOIntelligenceHub } from "@/components/dashboard/IPOIntelligenceHub";
@@ -7,6 +10,8 @@ import { IntradayScreener } from "@/components/dashboard/IntradayScreener";
 import { BudgetAllocator } from "@/components/dashboard/BudgetAllocator";
 import { PredictionChartOverlay, ForecastCorridorPoint } from "@/components/dashboard/PredictionChartOverlay";
 import { RiskMeter } from "@/components/dashboard/RiskMeter";
+import { MarketGeniusDrawer } from "@/components/dashboard/MarketGeniusDrawer";
+import { Button } from "@/components/ui/Button";
 import { AssetItem } from "@/types/market";
 
 const mockMarketAssets: AssetItem[] = [
@@ -38,18 +43,28 @@ const mockForecastCorridor: ForecastCorridorPoint[] = Array.from({ length: 30 },
 });
 
 export default function DashboardPage() {
+  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const mockPortfolioValueUSD = 124500.50;
   const mockPortfolioValueINR = 10398750.00;
 
   return (
-    <div className="min-h-screen bg-background text-slate-100 p-6 space-y-8 max-w-7xl mx-auto">
+    <div className="relative min-h-screen bg-background text-slate-100 p-6 space-y-8 max-w-7xl mx-auto">
       {/* Header */}
       <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-border pb-4 gap-4">
         <div>
           <h1 className="text-2xl font-extrabold tracking-tight">Financial Intelligence Dashboard</h1>
-          <p className="text-sm text-slate-400">Prophet predictive forecasts, news sentiment risk meter, budget allocation & IPO hub</p>
+          <p className="text-sm text-slate-400">MarketGenius RAG Copilot, Prophet forecasts, budget allocation & IPO hub</p>
         </div>
         <div className="flex items-center gap-3">
+          <Button
+            onClick={() => setIsDrawerOpen(true)}
+            className="bg-aiAccent hover:bg-aiAccent/80 text-white font-semibold flex items-center gap-2 shadow-lg shadow-aiAccent/20"
+          >
+            <Bot className="w-4 h-4" />
+            Ask MarketGenius AI
+            <Sparkles className="w-3.5 h-3.5" />
+          </Button>
+
           <span className="px-3 py-1 rounded-full text-xs font-semibold bg-profit/10 text-profit border border-profit/20 flex items-center gap-1">
             <span className="w-2 h-2 rounded-full bg-profit animate-pulse" />
             Live Market Feed
@@ -138,6 +153,22 @@ export default function DashboardPage() {
       <section className="pt-4">
         <IntradayScreener />
       </section>
+
+      {/* Floating Copilot Button (Bottom Right) */}
+      <button
+        onClick={() => setIsDrawerOpen(true)}
+        className="fixed bottom-6 right-6 p-4 rounded-full bg-aiAccent hover:bg-aiAccent/90 text-white shadow-2xl z-40 flex items-center gap-2 group transition-transform hover:scale-105"
+        title="Open MarketGenius AI Chat"
+      >
+        <Bot className="w-6 h-6 animate-pulse" />
+        <span className="font-semibold text-xs pr-1">Ask MarketGenius</span>
+      </button>
+
+      {/* MarketGenius RAG Copilot Side Drawer */}
+      <MarketGeniusDrawer
+        isOpen={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+      />
     </div>
   );
 }
