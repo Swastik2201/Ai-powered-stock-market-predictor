@@ -10,6 +10,7 @@ import { IntradayScreener } from "@/components/dashboard/IntradayScreener";
 import { BudgetAllocator } from "@/components/dashboard/BudgetAllocator";
 import { PredictionChartOverlay, ForecastCorridorPoint } from "@/components/dashboard/PredictionChartOverlay";
 import { RiskMeter } from "@/components/dashboard/RiskMeter";
+import { RiskRadarChart } from "@/components/dashboard/RiskRadarChart";
 import { MarketGeniusDrawer } from "@/components/dashboard/MarketGeniusDrawer";
 import { Button } from "@/components/ui/Button";
 import { AssetItem } from "@/types/market";
@@ -53,7 +54,7 @@ export default function DashboardPage() {
       <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-border pb-4 gap-4">
         <div>
           <h1 className="text-2xl font-extrabold tracking-tight">Financial Intelligence Dashboard</h1>
-          <p className="text-sm text-slate-400">MarketGenius RAG Copilot, Prophet forecasts, budget allocation & IPO hub</p>
+          <p className="text-sm text-slate-400">MarketGenius RAG Copilot, 5-Axis Risk Radar, Prophet forecasts, budget allocation & IPO hub</p>
         </div>
         <div className="flex items-center gap-3">
           <Button
@@ -108,6 +109,11 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+
+      {/* 5-Axis Quantitative Risk Radar Chart Section */}
+      <section className="pt-4">
+        <RiskRadarChart symbol="RELIANCE" />
+      </section>
 
       {/* Main ML Forecast Corridor & Risk Meter Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-4">
