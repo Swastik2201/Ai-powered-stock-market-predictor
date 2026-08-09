@@ -16,6 +16,7 @@ import { ClanLeaderboard } from "@/components/dashboard/ClanLeaderboard";
 import { DailyQuizCard } from "@/components/dashboard/DailyQuizCard";
 import { BadgeGallery } from "@/components/dashboard/BadgeGallery";
 import { MarketGeniusDrawer } from "@/components/dashboard/MarketGeniusDrawer";
+import { UserNav } from "@/components/common/UserNav";
 import { Button } from "@/components/ui/Button";
 import { AssetItem } from "@/types/market";
 
@@ -81,6 +82,8 @@ export default function DashboardPage() {
             <span className="w-2 h-2 rounded-full bg-profit animate-pulse" />
             Live Market Feed
           </span>
+
+          <UserNav />
         </div>
       </header>
 
